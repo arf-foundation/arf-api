@@ -19,4 +19,4 @@ jobs:
         env:
           DATABASE_URL: sqlite:///./test.db
           API_KEY: test-key
-        run: pytest tests/ -v
+        run: python -m pytest tests/ -v
