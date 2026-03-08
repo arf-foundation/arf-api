@@ -6,6 +6,10 @@ from app.database.models_intents import IntentDB, OutcomeDB
 from app.services.outcome_service import record_outcome, OutcomeConflictError
 from unittest.mock import MagicMock
 import datetime
+from agentic_reliability_framework.core.governance.intents import (
+    ProvisionResourceIntent,
+    ResourceType,
+)
 
 @pytest.fixture
 def db_session():
@@ -23,11 +27,22 @@ def mock_risk_engine():
     return engine
 
 def test_record_outcome_creates_row_and_updates_engine(db_session, mock_risk_engine):
+    # Create a real OSS intent with dummy values
+    oss_intent = ProvisionResourceIntent(
+        resource_type=ResourceType.VM,
+        region="eastus",
+        size="Standard",
+        environment="dev",  # use string literal, not enum
+        requester="test_user"
+    )
+    # Use mode='json' to convert datetime to string automatically
+    oss_payload = oss_intent.model_dump(mode='json')
+
     intent = IntentDB(
         deterministic_id="intent_abc",
         intent_type="ProvisionResourceIntent",
         payload={},
-        oss_payload={"intent_type": "provision_resource"},
+        oss_payload=oss_payload,
         created_at=datetime.datetime.utcnow()
     )
     db_session.add(intent)
