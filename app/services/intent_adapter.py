@@ -4,8 +4,6 @@ from agentic_reliability_framework.core.governance.intents import (
     DeployConfigurationIntent,
     ResourceType,
     PermissionLevel,
-    Environment,
-    ChangeScope,
 )
 from app.models.infrastructure_intents import (
     ProvisionResourceRequest,
@@ -20,7 +18,7 @@ def to_oss_intent(api_request):
             region=api_request.region,
             size=api_request.size,
             configuration=api_request.configuration,
-            environment=Environment(api_request.environment),
+            environment=api_request.environment,
             requester=api_request.requester,
             provenance=api_request.provenance,
         )
@@ -36,8 +34,8 @@ def to_oss_intent(api_request):
     elif api_request.intent_type == "deploy_config":
         return DeployConfigurationIntent(
             service_name=api_request.service_name,
-            change_scope=api_request.change_scope,  # directly pass string; ChangeScope is a Literal, not a class
-            deployment_target=Environment(api_request.deployment_target),
+            change_scope=api_request.change_scope,
+            deployment_target=api_request.deployment_target,
             risk_level_hint=api_request.risk_level_hint,
             configuration=api_request.configuration,
             requester=api_request.requester,
