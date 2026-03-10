@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     environment: str = "development"
     database_url: Optional[str] = None
     api_key: Optional[str] = None
+    RATE_LIMIT: str = "100/minute"  # default limit
 
     class Config:
         env_file = ".env"
