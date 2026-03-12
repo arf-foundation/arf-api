@@ -29,3 +29,5 @@ build/
 test.db
 venv
 .coverage
+monitor.log
+monitor_loop.log
